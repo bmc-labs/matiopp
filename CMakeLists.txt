@@ -13,12 +13,12 @@
 # limitations under the License.
 
 # CMake 3.1.0 required for CMAKE_CXX_STANDARD variable
-cmake_minimum_required (VERSION 3.1.0)
+cmake_minimum_required (VERSION 3.10.0)
 project (matiopp VERSION 1.0.0 LANGUAGES CXX)
 
 # detect compiler
-set (GCC_VERSION 6.2.0)
-set (CLANG_VERSION 5.0.0)
+set (GCC_VERSION 7.3.0)
+set (CLANG_VERSION 6.0.0)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${GCC_VERSION})
@@ -44,11 +44,11 @@ set (CMAKE_CXX_EXTENSIONS OFF)
 #
 add_compile_options (-Wall -Wextra -Wpedantic -Werror)
 
-# compile commands (e.g. for youcompleteme, the vim plugin)
-set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 # set output directory
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# compile commands (e.g. for youcompleteme, the vim plugin)
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # enable testing and add unit tests for Debug build
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")

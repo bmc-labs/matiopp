@@ -12,36 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# i like big Boost and i cannot lie
+# matio, HDF5 & Boost
+find_library (MATIO_FOUND matio)
+if (NOT MATIO_FOUND)
+  message (FATAL_ERROR "matio library not found, aborting")
+endif ()
+
+find_package (HDF5 COMPONENTS HL REQUIRED)
 find_package (Boost COMPONENTS regex REQUIRED)
 
-set (TARGET matiopp-test)
-
-add_executable (${TARGET} main.cc ${TARGET}.cc)
-
-target_include_directories (${TARGET} PUBLIC
-  ${matiopp_SOURCE_DIR}/include
+# define target (INTERFACE bc header only)
+add_library (matiopp INTERFACE)
+target_include_directories (matiopp INTERFACE
+  $${matiopp_SOURCE_DIR}/include
   ${Boost_INCLUDE_DIRS}
 )
 
-target_link_libraries (${TARGET} matio gcov ${Boost_LIBRARIES})
-
-# compile options for test coverage
-target_compile_options (${TARGET} PRIVATE
-  -fprofile-arcs
-  -ftest-coverage
-  -fno-inline
-  -fno-inline-small-functions
-  -fno-default-inline
-  -fPIC
-  -O0
-  --coverage
+target_link_libraries (matiopp INTERFACE
+  matio
+  ${HDF5_LIBRARIES}
+  ${Boost_LIBRARIES}
 )
-
-# required for CTest
-add_test (NAME ${TARGET} COMMAND ${TARGET})
-
-# copy test file to binary directory
-file (GLOB TESTDATA TESTDATA-*.mat)
-file (COPY ${TESTDATA} DESTINATION ${CMAKE_BINARY_DIR})
 
