@@ -61,8 +61,9 @@ find_package (Boost COMPONENTS regex REQUIRED)
 
 # define target (INTERFACE bc header only)
 add_library (matiopp INTERFACE)
+target_sources (matiopp INTERFACE mat.h)
 target_include_directories (matiopp INTERFACE
-  $${matiopp_SOURCE_DIR}/include
+  ${matiopp_SOURCE_DIR}/include
   ${Boost_INCLUDE_DIRS}
 )
 
