@@ -50,6 +50,28 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # compile commands (e.g. for youcompleteme, the vim plugin)
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# matio, HDF5 & Boost
+find_library (MATIO_FOUND matio)
+if (NOT MATIO_FOUND)
+  message (FATAL_ERROR "matio library not found, aborting")
+endif ()
+
+find_package (HDF5 COMPONENTS HL REQUIRED)
+find_package (Boost COMPONENTS regex REQUIRED)
+
+# define target (INTERFACE bc header only)
+add_library (matiopp INTERFACE)
+target_include_directories (matiopp INTERFACE
+  $${matiopp_SOURCE_DIR}/include
+  ${Boost_INCLUDE_DIRS}
+)
+
+target_link_libraries (matiopp INTERFACE
+  matio
+  ${HDF5_LIBRARIES}
+  ${Boost_LIBRARIES}
+)
+
 # enable testing and add unit tests for Debug build
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   enable_testing ()
