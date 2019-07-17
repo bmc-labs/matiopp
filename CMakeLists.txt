@@ -60,14 +60,17 @@ find_package (HDF5 COMPONENTS HL REQUIRED)
 find_package (Boost COMPONENTS regex REQUIRED)
 
 # define target (INTERFACE bc header only)
-add_library (matiopp INTERFACE)
-target_sources (matiopp INTERFACE ${matiopp_SOURCE_DIR}/include/mat.h)
-target_include_directories (matiopp INTERFACE
+set (TARGET matiopp)
+
+add_library (${TARGET} INTERFACE)
+add_library (${TARGET}::${TARGET} ALIAS ${TARGET})
+target_sources (${TARGET} INTERFACE ${matiopp_SOURCE_DIR}/include/mat.h)
+target_include_directories (${TARGET} INTERFACE
   ${matiopp_SOURCE_DIR}/include
   ${Boost_INCLUDE_DIRS}
 )
 
-target_link_libraries (matiopp INTERFACE
+target_link_libraries (${TARGET} INTERFACE
   matio
   ${HDF5_LIBRARIES}
   ${Boost_LIBRARIES}

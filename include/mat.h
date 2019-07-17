@@ -57,7 +57,6 @@ public:
     } else {
       boost::regex  matcher{regex,
                            boost::regex::ECMAScript | boost::regex::icase};
-      boost::smatch match;
 
       while ((matvar =
                 matvar_type{Mat_VarReadNextInfo(matfp.get()), Mat_VarFree})) {
