@@ -23,59 +23,30 @@ Have a look at the tests, ideally, but it's all meant to work as simple as:
 
 ```c++
 //
-// create can::interface object
+// create bmc::mat object
 //
-can::interface<vcan> iface{
-  "vcan",          // device name (CAN socket on Linux)
-  500,             // bus speed (kBit/s)
-  true,            // listen only mode
-  "protocol.json"  // optional; eventually: somefile.dbc
-};
+bmc::mat my_data{filename /* std::string */, channel_regex /* std::string */};
 
-//
-// set up can::message
-//
-can::message msg{
-  0x024,              // CAN message ID
-  8,                  // length in bytes
-  0xdeadbeefdeadbeef  // payload
-};
+auto no_of_channels = my_data.number_of_channels();
 
-//
-// send message on interface
-//
-iface << msg;
+auto temp_sensor = my_data.at("temp_sensor");  // or my_data["temp_sensor"]
+
+for (const auto & it : my_data) {
+  // do something with the channel
+}
+
+if (my_data.find("pressure") != my_data.end()) {
+  std::cout << "pressure column found" << '\n';
+}
+
+auto size_of_columns = my_data.size();
+
+if (my_data.empty()) {
+  std::cout << "no data found in file" << '\n';
+}
 ```
 
-This is of course a trivial example, but if you're willing to create your
-payloads in this way, it does work.
-
-More elegant access to things are granted to you like this:
-
-```c++
-auto speed_over_ground = iface.signal(0x30f, "speed_over_ground");
-```
-
-The variable `speed_over_ground` then is a reference to that signal. This, of
-course, requires you to specify the signal beforehand, i.e. the `protocol.json`
-must contain the following:
-
-```json
-```
-
-Assuming you provided a valid `protocol.json`, you can then read from the
-signal references (or message references) you specified and will always get the
-latest received values, or zeroes if nothing has been received yet. You can
-also _write_ on the CAN using these references:
-
-```c++
-speed_over_ground << 186.5;         // ... or ...
-speed_over_ground.update(186.5);    // ... or ...
-iface[speed_over_ground] << 186.5;
-```
-
-So, you see, although _CAN Abstraction Layer_ might be overstating it a bit,
-_CANAL_ can still help you do things more easily.
+The regex string is optional; you can leave it empty to just load everything.
 
 
 Making it part of you project
