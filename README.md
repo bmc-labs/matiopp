@@ -48,6 +48,8 @@ if (my_data.empty()) {
 
 The regex string is optional; you can leave it empty to just load everything.
 
+Data is returned as `std::vector<float>`.
+
 
 Making it part of you project
 ==
