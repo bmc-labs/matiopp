@@ -55,7 +55,7 @@ public:
         absorb_data(matvar);
       }
     } else {
-      boost::regex  matcher{regex,
+      boost::regex matcher{regex,
                            boost::regex::ECMAScript | boost::regex::icase};
 
       while ((matvar =
