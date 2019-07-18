@@ -1,4 +1,4 @@
-# Copyright 2019 Florian Eich <florian@bmc-labs.com>
+# Copyright 2019 bmc::labs GmbH.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ set (TARGET matiopp)
 
 add_library (${TARGET} INTERFACE)
 add_library (${TARGET}::${TARGET} ALIAS ${TARGET})
-target_sources (${TARGET} INTERFACE ${matiopp_SOURCE_DIR}/include/mat.h)
+target_sources (${TARGET} INTERFACE ${matiopp_SOURCE_DIR}/include/${TARGET}.h)
 target_include_directories (${TARGET} INTERFACE
   ${matiopp_SOURCE_DIR}/include
   ${Boost_INCLUDE_DIRS}

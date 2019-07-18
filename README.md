@@ -1,29 +1,20 @@
-# This repository...
+`matiopp`
+---
 
-... contains a more or less viable basic configuration for C++ projects using
-CMake.
-
-## Main features
-
-- directory structure with a bunch of CMakeFiles showing a bunch of (imho)
-  useful features of CMake (it's probably best you go through them and throw
-  away what you don't need)
-- preconfigured Doxyfile for doxygen documentation generator. Pictures go in
-`./misc`, code examples go in `./doc/examples`.
-- my very own and therefore best `clang-format` config
-- a `tests` directory containing [catch](https://catch-lib.net) - shoutout to
-  Catch, which is awesome imho - a `main.cc` to speed up your builds an a
-  `CMakeLists.txt`; just put your tests in files there and add them to the
-  target list in the CMake file
+... is a thin, header-only C++ wrapper for matio..
 
 
-**here's also an example README for you to use/discard:**
+Main features
+==
 
+- modern C++ semantics implemented: all the allocation and freeing of memory
+  happens via constructor and smart pointers
+- uses `boost.regex` to filter for channels/columns/vectors/whatever you want
+  to call them
+- uses exceptions to gracefully handle things
+- is really drop-in and use; makes you feel like C++ is Python (except thanks
+  to `matio` you can use one solution for all versions of mat files)
 
-_Project Name_
---
-
-_explanation of project name and short description of what it does_
 
 
 Usage
@@ -89,22 +80,19 @@ _CANAL_ can still help you do things more easily.
 
 Making it part of you project
 ==
-First, maybe try building it and running the tests:
+There are two ways to do this. Option A is: clone the repo, copy [the
+header](include/matiopp.h) to your project and include it. That's probably the
+easiest thing to to if you're not using CMake.
 
-```bash
-git clone https://github.com/eichf/canal.git
-cd canal
-mkdir build && build
-cmake ..
-make
-make test
+If you are using CMake, I recommend you clone the repo to your thirdparty
+directory or whereever you want it to live and add the following to your
+CMakeList files:
+
+```cmake
+add_subdirectory (${YourProject_SOURCE_DIR}/path/to/matiopp)
+
+add_exectuable (your_executable your_sources.cc)          # or library
+target_link_libraries (your_executable matiopp::matiopp)  # or PRIVATE etc
 ```
 
-Then, include it in your project:
-
-```bash
-cd <your_project>/<wherever-you-keep-thirdparty-code>
-git clone --recursive https://github.com/eichf/canal.git
-```
-
-and add it to the include directories in your `CMakeLists.txt`.
+That's it. Have fun.

@@ -1,4 +1,4 @@
-// Copyright 2019 Florian Eich <florian@bmc-labs.com>
+// Copyright 2019 bmc::labs GmbH.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

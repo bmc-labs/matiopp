@@ -1,4 +1,4 @@
-# Copyright 2019 Florian Eich <florian@bmc-labs.com>
+# Copyright 2019 bmc::labs GmbH.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,8 +38,8 @@ target_compile_options (${TARGET} PRIVATE
   --coverage
 )
 
-# required for CTest
-add_test (NAME ${TARGET} COMMAND ${TARGET})
+# required for CTest -- CURRENTLY NOT WORKING
+# add_test (NAME ${TARGET} COMMAND ${TARGET})
 
 # copy test file to binary directory
 file (GLOB TESTDATA TESTDATA-*.mat)
