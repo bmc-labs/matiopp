@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # CMake 3.1.0 required for CMAKE_CXX_STANDARD variable
-cmake_minimum_required (VERSION 3.10.0)
+cmake_minimum_required (VERSION 3.1.0)
 project (matiopp VERSION 1.0.0 LANGUAGES CXX)
 
 # detect compiler
