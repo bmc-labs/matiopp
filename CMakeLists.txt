@@ -60,13 +60,13 @@ find_package (HDF5 COMPONENTS HL REQUIRED)
 find_package (Boost COMPONENTS regex REQUIRED)
 
 # define target (INTERFACE bc header only)
-set (TARGET matiopp)
-
-add_library (${TARGET} INTERFACE)
-add_library (${TARGET}::${TARGET} ALIAS ${TARGET})
-target_sources (${TARGET} INTERFACE ${matiopp_SOURCE_DIR}/include/${TARGET}.h)
-target_include_directories (${TARGET} INTERFACE
-  ${matiopp_SOURCE_DIR}/include
+add_library (${PROJECT_NAME} INTERFACE)
+add_library (${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+target_sources (${PROJECT_NAME} INTERFACE
+  ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}.h
+)
+target_include_directories (${PROJECT_NAME} INTERFACE
+  ${PROJECT_SOURCE_DIR}/include
   ${Boost_INCLUDE_DIRS}
 )
 
@@ -79,6 +79,6 @@ target_link_libraries (${TARGET} INTERFACE
 # enable testing and add unit tests for Debug build
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   enable_testing ()
-  add_subdirectory (${matiopp_SOURCE_DIR}/tests)
+  add_subdirectory (${PROJECT_SOURCE_DIR}/tests)
 endif()
 
