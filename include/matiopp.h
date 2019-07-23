@@ -51,8 +51,8 @@ public:
     if (regex.empty()) {
       while (
         (matvar = matvar_type{Mat_VarReadNext(matfp.get()), Mat_VarFree})) {
-        update_cardinality(*(matvar->dims));
-        absorb_data(matvar);
+        updatecardinality_(*(matvar->dims));
+        absorbdata_(matvar);
       }
     } else {
       boost::regex matcher{regex,
@@ -61,13 +61,13 @@ public:
       while ((matvar =
                 matvar_type{Mat_VarReadNextInfo(matfp.get()), Mat_VarFree})) {
         if (boost::regex_search(matvar->name, matcher)) {
-          update_cardinality(*(matvar->dims));
-          absorb_data(
+          updatecardinality_(*(matvar->dims));
+          absorbdata_(
             matvar_type{Mat_VarRead(matfp.get(), matvar->name), Mat_VarFree});
         }
       }
 
-      if (_data.empty()) {
+      if (data_.empty()) {
         throw std::invalid_argument{"no channels matched"};
       }
     }
@@ -75,14 +75,14 @@ public:
 
   std::vector<key_type> keys() const noexcept {
     std::vector<mat::key_type> keys;
-    for (const auto & pair : _data) { keys.push_back(pair.first); }
+    for (const auto & pair : data_) { keys.push_back(pair.first); }
     return keys;
   }
 
   std::vector<key_type> channels() const noexcept { return keys(); }
 
-  mapped_type         at(const key_type & key) { return _data.at(key); }
-  const mapped_type & at(const key_type & key) const { return _data.at(key); }
+  mapped_type         at(const key_type & key) { return data_.at(key); }
+  const mapped_type & at(const key_type & key) const { return data_.at(key); }
 
   mapped_type         operator[](const key_type & key) { return at(key); }
   const mapped_type & operator[](const key_type & key) const {
@@ -95,41 +95,41 @@ public:
   const_iterator find(const std::string & regex) const {
     boost::regex matcher{regex,
                          boost::regex::ECMAScript | boost::regex::icase};
-    for (auto it = std::begin(_data); it != std::end(_data); ++it) {
+    for (auto it = std::begin(data_); it != std::end(data_); ++it) {
       if (boost::regex_search(it->first, matcher)) { return it; }
     }
-    return std::end(_data);
+    return std::end(data_);
   }
 
-  iterator       begin() noexcept { return std::begin(_data); }
-  const_iterator cbegin() const noexcept { return std::cbegin(_data); }
-  iterator       end() noexcept { return std::end(_data); }
-  const_iterator cend() const noexcept { return std::cend(_data); }
+  iterator       begin() noexcept { return std::begin(data_); }
+  const_iterator cbegin() const noexcept { return std::cbegin(data_); }
+  iterator       end() noexcept { return std::end(data_); }
+  const_iterator cend() const noexcept { return std::cend(data_); }
 
-  bool        empty() const noexcept { return _data.empty(); }
-  std::size_t size() const noexcept { return _cardinality; }
-  std::size_t number_of_channels() const noexcept { return _data.size(); }
+  bool        empty() const noexcept { return data_.empty(); }
+  std::size_t size() const noexcept { return cardinality_; }
+  std::size_t number_of_channels() const noexcept { return data_.size(); }
 
-  bool operator==(const mat & rhs) const { return _data == rhs._data; }
+  bool operator==(const mat & rhs) const { return data_ == rhs.data_; }
   bool operator!=(const mat & rhs) const { return !this->operator==(rhs); }
 
 private:
-  void update_cardinality(std::size_t cardinality) {
-    if (_cardinality == 0u) {
-      _cardinality = cardinality;
-    } else if (_cardinality != cardinality) {
+  void updatecardinality_(std::size_t cardinality) {
+    if (cardinality_ == 0u) {
+      cardinality_ = cardinality;
+    } else if (cardinality_ != cardinality) {
       throw std::length_error{"columns differ in size"};
     }
   }
 
-  void absorb_data(const matvar_type & matvar) {
+  void absorbdata_(const matvar_type & matvar) {
     auto data_ptr{static_cast<float *>(matvar->data)};
-    _data[matvar->name] = {data_ptr, data_ptr + _cardinality};
+    data_[matvar->name] = {data_ptr, data_ptr + cardinality_};
   }
 
 private:
-  data_type   _data;
-  std::size_t _cardinality{0};
+  data_type   data_;
+  std::size_t cardinality_{0};
 };
 
 }  // namespace bmc
